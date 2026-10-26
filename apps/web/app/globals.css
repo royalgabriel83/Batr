@@ -1,0 +1,147 @@
+@import "tailwindcss";
+/* Token values live in packages/shared and are generated into
+   tokens.css. Never write raw color values in app code; `pnpm lint`
+   rejects them. */
+@import "./tokens.css";
+
+/* Hover styles that apply only while a control is enabled. */
+@custom-variant enabled-hover (&[data-enabled]:hover);
+
+@layer base {
+  html {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-base);
+    font-family: var(--font-sans);
+  }
+
+  /* Display and section headings use the display serif (ui-context.md,
+     Typography; PROPOSED 2026-10-17). Inter stays for everything else. */
+  :where([class*="text-display"], [class*="text-h1"], [class*="text-h2"]) {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+  }
+
+  /* Lucide stroke by icon size (ui-context.md, Icons): 2 at 16px,
+     1.75 at 20 and 24px, 1.5 at 32px. */
+  svg.lucide {
+    stroke-width: 2;
+  }
+  svg.lucide:is(.size-5, .size-6) {
+    stroke-width: 1.75;
+  }
+  svg.lucide.size-8 {
+    stroke-width: 1.5;
+  }
+
+  /* Visible focus on every interactive element (ui-context.md). */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Motion (ui-context.md, Motion): carousel slides move on the
+   emphasized curve, and the offer page's exchange panel joins its two
+   sides on arrival. The reduced-motion rule above stills both. */
+:root {
+  --swiper-wrapper-transition-timing-function: var(--ease-emphasized);
+}
+
+/* Text never fades: low-contrast text, even for a moment, fails
+   WCAG contrast. Moving pieces that carry text only move. */
+@keyframes exchange-join-from-above {
+  from {
+    transform: translateY(-0.75rem);
+  }
+}
+
+@keyframes exchange-join-from-below {
+  from {
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes exchange-mark-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-90deg);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    transform: translateY(1.5rem);
+  }
+}
+
+@theme {
+  --animate-exchange-above: exchange-join-from-above var(--duration-exchange) var(--ease-emphasized) both;
+  --animate-exchange-below: exchange-join-from-below var(--duration-exchange) var(--ease-emphasized) both;
+  --animate-exchange-mark: exchange-mark-in var(--duration-exchange) var(--ease-emphasized) 160ms both;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem) scale(0.97);
+  }
+}
+
+@theme {
+  --animate-menu-in: menu-in var(--duration-base) var(--ease-emphasized) both;
+  --animate-reveal: reveal-up var(--duration-slow) var(--ease-emphasized) both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@theme {
+  --animate-toast-in: toast-in var(--duration-base) var(--ease-emphasized) both;
+}
+
+/* Scroll reveals (ui-context.md, Motion): sections and cards rise
+   into place as they enter the screen, driven by scrolling itself, so
+   no script runs. They move without fading (see above). Browsers without scroll-driven animations, and anyone who
+   reduces motion, see everything in place. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Duration tokens as utilities: Tailwind has no theme namespace for
+   durations, so `duration-fast` and the rest are declared here. */
+@utility duration-fast {
+  --tw-duration: var(--duration-fast);
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  --tw-duration: var(--duration-base);
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  --tw-duration: var(--duration-slow);
+  transition-duration: var(--duration-slow);
+}
+@utility duration-exchange {
+  --tw-duration: var(--duration-exchange);
+  transition-duration: var(--duration-exchange);
+}

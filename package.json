@@ -1,0 +1,40 @@
+{
+  "name": "batr",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @batr/web dev",
+    "build": "pnpm -r run build",
+    "lint": "eslint . --max-warnings=0 && node scripts/check-css-tokens.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "test:e2e": "pnpm --filter @batr/web test:e2e",
+    "test:db": "node scripts/with-local-supabase-env.mjs vitest run --config vitest.db.config.ts",
+    "test:api": "node scripts/with-local-supabase-env.mjs vitest run --config apps/web/vitest.api.config.ts",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:status": "supabase status",
+    "cleanup:storage": "node scripts/cleanup-storage.mjs",
+    "env:local": "node scripts/write-env-local.mjs",
+    "tokens:write": "node scripts/generate-tokens-css.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@supabase/supabase-js": "2.118.0",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.23.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.1",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "pg": "8.23.1",
+    "supabase": "2.121.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "5.0.5"
+  }
+}

@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm 10 does not run dependency install scripts unless listed here.
+# supabase: downloads the Supabase CLI binary used by the db:* scripts.
+onlyBuiltDependencies:
+  - supabase
+
+# unrs-resolver (used by eslint-config-next) installs its native
+# binary through optional dependencies; its install script is not needed.
+ignoredBuiltDependencies:
+  - unrs-resolver
